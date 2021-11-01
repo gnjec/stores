@@ -30,6 +30,12 @@
             border-radius: 2px;
         }
 
+        button {
+            border-style: solid;
+            border-radius: 2px;
+            margin-right: 4px;
+        }
+
         ul {
             width: 300px;
             padding: 0px;
@@ -52,13 +58,51 @@
             margin-left: 20px;
         }
 
+        .head {
+            margin-bottom: 40px;
+        }
+
+        .delete {
+            margin-top: 1px;
+            width: 80px;
+        }
+
+        .delete input {
+            background-color: wheat;
+            color: red;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+        }
+
     </style>
 </head>
 
 <body class="antialiased">
-    <h2>Stores</h2>
+
+    <div class="head">
+        <h3><a href="{{ url('/') }}">Home</a></h3>
+        <h2>Store</h2>
+        <div class="actions">
+            <a href="{{ url($store->base_url . '/edit') }}"><button>Edit</button></a>
+            <form class="delete" action="{{ url($store->base_url . '/delete') }}" method="post">
+                @csrf
+                <input type="submit" value="Delete">
+            </form>
+        </div>
+        <h3>{{ $store->name }}</h3>
+        <div>{{ $store->code }}</div>
+        <div>{{ $store->base_url }}</div>
+        <div>{{ $store->description }}</div>
+    </div>
+
+
+
     <div class=container>
-        <div>
+
+        {{-- <div>
             <form action="/stores" method="post">
                 @csrf
                 <label for="name">Name</label>
@@ -73,23 +117,22 @@
                 <label for="description">Description</label>
                 <input type="text" name="description" value="">
                 <br>
-                <input type="submit" value="Create">
+                <input type="submit" value="Submit">
             </form>
-        </div>
-        <div class="list">
+        </div> --}}
+
+        {{-- <div class="list">
             <ul>
                 @foreach ($stores as $store)
                     <li>
-                        <code>{{ $store->code }}</code>
-                        <a href="{{ url($store->base_url) }}">
-                            <h3>{{ $store->name }}</h3>
-                        </a>
-                        {{-- <div>{{ $store->base_url }}</div> --}}
+                        <h3>{{ $store->name }}</h3>
+                        <div>{{ $store->code }}</div>
+                        <div>{{ $store->base_url }}</div>
                         <div>{{ $store->description }}</div>
                     </li>
                 @endforeach
             </ul>
-        </div>
+        </div> --}}
     </div>
 </body>
 

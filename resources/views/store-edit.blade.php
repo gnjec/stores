@@ -30,6 +30,12 @@
             border-radius: 2px;
         }
 
+        button {
+            border-style: solid;
+            border-radius: 2px;
+            margin-right: 4px;
+        }
+
         ul {
             width: 300px;
             padding: 0px;
@@ -52,43 +58,34 @@
             margin-left: 20px;
         }
 
+        .head {
+            margin-bottom: 40px;
+        }
+
     </style>
 </head>
 
 <body class="antialiased">
-    <h2>Stores</h2>
+    <h3><a href="{{url('/')}}">Home</a></h3>
+    <h2>Edit Store</h2>
     <div class=container>
         <div>
-            <form action="/stores" method="post">
+            <form action="{{ url($store->base_url . '/update') }}" method="post">
                 @csrf
                 <label for="name">Name</label>
-                <input type="text" name="name" value="">
+                <input type="text" name="name" value="{{ $store->name }}">
 
                 <label for="code">Code</label>
-                <input type="text" name="code" value="">
+                <input type="text" name="code" value="{{ $store->code }}">
 
                 <label for="base_url">Base url</label>
-                <input type="text" name="base_url" value="">
+                <input type="text" name="base_url" value="{{ $store->base_url }}">
 
                 <label for="description">Description</label>
-                <input type="text" name="description" value="">
+                <input type="text" name="description" value="{{ $store->description }}">
                 <br>
-                <input type="submit" value="Create">
+                <input type="submit" value="Update">
             </form>
-        </div>
-        <div class="list">
-            <ul>
-                @foreach ($stores as $store)
-                    <li>
-                        <code>{{ $store->code }}</code>
-                        <a href="{{ url($store->base_url) }}">
-                            <h3>{{ $store->name }}</h3>
-                        </a>
-                        {{-- <div>{{ $store->base_url }}</div> --}}
-                        <div>{{ $store->description }}</div>
-                    </li>
-                @endforeach
-            </ul>
         </div>
     </div>
 </body>

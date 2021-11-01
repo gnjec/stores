@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StoreController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [StoreController::class, 'index']);
+Route::post('/stores', [StoreController::class, 'store']);
+Route::get('{store:base_url}', [StoreController::class, 'show']);
+Route::get('{store:base_url}/edit', [StoreController::class, 'edit']);
+Route::post('{store:base_url}/update', [StoreController::class, 'update']);
+Route::post('{store:base_url}/delete', [StoreController::class, 'destroy']);
