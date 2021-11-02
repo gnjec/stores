@@ -69,6 +69,21 @@
             margin-bottom: 40px;
         }
 
+        .delete {
+            margin-top: 1px;
+            width: 80px;
+        }
+
+        .delete input {
+            background-color: wheat;
+            color: red;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+        }
+
         .menu {
             display: flex;
             justify-content: center;
@@ -76,6 +91,10 @@
 
         .menu h3 {
             padding: 10px;
+        }
+
+        .bottom ul {
+            margin: auto;
         }
 
     </style>
@@ -86,46 +105,34 @@
         <h3><a href="{{ url('/') }}">Stores</a></h3>
         <h3><a href="{{ url('/products') }}">Products</a></h3>
     </div>
-    <h2>Edit Store</h2>
     <div class="container">
-        <div>
-            <form action="{{ url($store->base_url . '/update') }}" method="post">
-                @csrf
-                <label for="product">Add product:</label>
-                <select name="product">
-                    <option value="">- or leave empty -</option>
-                    @foreach ($products as $product)
-                        <option value="{{ $product->id }}">{{ $product->name }} - {{ $product->sku }}</option>
-                    @endforeach
-                </select>
-
-                <label for="name">Name</label>
-                <input type="text" name="name" value="{{ $store->name }}">
-
-                <label for="code">Code</label>
-                <input type="text" name="code" value="{{ $store->code }}">
-
-                <label for="base_url">Base url</label>
-                <input type="text" name="base_url" value="{{ $store->base_url }}">
-
-                <label for="description">Description</label>
-                <input type="text" name="description" value="{{ $store->description }}">
-                <br>
-                <input type="submit" value="Update">
-            </form>
+        <div class="head">
+            <h2>Product</h2>
+            <div class="actions">
+                <a href="{{ url('/product' . $product->url->path . '/edit') }}"><button>Edit</button></a>
+                <form class="delete" action="{{ url('/product' . $product->url->path . '/delete') }}"
+                    method="post">
+                    @csrf
+                    <input type="submit" value="Delete">
+                </form>
+            </div>
+            <h3>{{ $product->name }}</h3>
+            <div>{{ $product->sku }}</div>
+            <div>{{ $product->description }}</div>
+            <div>{{ $product->price }}</div>
         </div>
-        @if (count($products))
+
+        @if (count($product->stores))
             <div class="list">
-                <h4>Has products:</h4>
+                <h4>In stores:</h4>
                 <ul>
-                    @foreach ($products as $product)
-                        <li class="product">
-                            <a href="{{ url('/' . $store->base_url . $product->url->path) }}">
-                                <h3>{{ $product->name }}</h3>
+                    @foreach ($product->stores as $store)
+                        <li class="store">
+                            <code>{{ $store->code }}</code>
+                            <a href="{{ url($store->base_url) }}">
+                                <h3>{{ $store->name }}</h3>
                             </a>
-                            <div>{{ $product->sku }}</div>
-                            <div>{{ $product->description }}</div>
-                            <div>{{ $product->price }}</div>
+                            <div>{{ $store->description }}</div>
                         </li>
                     @endforeach
                 </ul>

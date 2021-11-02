@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\Url;
 use App\Models\Product;
 
 class ProductObserver
@@ -14,7 +15,10 @@ class ProductObserver
      */
     public function created(Product $product)
     {
-        //
+        $product->slug ??= $product->sku;
+        $url = new Url;
+        $url->path = '/' . $product->slug;
+        $product->url()->save($url);
     }
 
     /**
@@ -25,7 +29,13 @@ class ProductObserver
      */
     public function updated(Product $product)
     {
-        //
+        if ('/' . $product->slug !== $product->url->path) {
+            $product->url->delete();
+            $product->slug ??= $product->sku;
+            $url = new Url;
+            $url->path = '/' . $product->slug;
+            $product->url()->save($url);
+        }
     }
 
     /**

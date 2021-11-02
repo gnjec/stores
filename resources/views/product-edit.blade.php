@@ -30,6 +30,12 @@
             border-radius: 2px;
         }
 
+        button {
+            border-style: solid;
+            border-radius: 2px;
+            margin-right: 4px;
+        }
+
         ul {
             width: 300px;
             padding: 0px;
@@ -59,6 +65,10 @@
             margin-left: 20px;
         }
 
+        .head {
+            margin-bottom: 40px;
+        }
+
         .menu {
             display: flex;
             justify-content: center;
@@ -76,40 +86,53 @@
         <h3><a href="{{ url('/') }}">Stores</a></h3>
         <h3><a href="{{ url('/products') }}">Products</a></h3>
     </div>
-
-    <h2>Stores</h2>
+    <h2>Edit Product</h2>
     <div class="container">
         <div>
-            <form action="/stores" method="post">
+            <form action="{{ url('/product' . $product->url->path . '/update') }}" method="post">
                 @csrf
+                <label for="store">Add to store:</label>
+                <select name="store">
+                    <option value="">- or leave empty -</option>
+                    @foreach ($stores as $store)
+                        <option value="{{ $store->id }}">{{ $store->name }} - {{ $store->code }}</option>
+                    @endforeach
+                </select>
+
                 <label for="name">Name</label>
-                <input type="text" name="name" value="">
+                <input type="text" name="name" value="{{ $product->name }}">
 
-                <label for="code">Code</label>
-                <input type="text" name="code" value="">
+                <label for="sku">Sku</label>
+                <input type="text" name="sku" value="{{ $product->sku }}">
 
-                <label for="base_url">Base url</label>
-                <input type="text" name="base_url" value="">
+                <label for="price">Price</label>
+                <input type="text" name="price" value="{{ $product->price }}">
 
                 <label for="description">Description</label>
-                <input type="text" name="description" value="">
+                <input type="text" name="description" value="{{ $product->description }}">
+
+                <label for="slug">Slug</label>
+                <input type="text" name="slug" value="{{ $product->slug }}">
                 <br>
-                <input type="submit" value="Create">
+                <input type="submit" value="Update">
             </form>
         </div>
-        <div class="list">
-            <ul>
-                @foreach ($stores as $store)
-                    <li class="store">
-                        <code>{{ $store->code }}</code>
-                        <a href="{{ url($store->base_url) }}">
-                            <h3>{{ $store->name }}</h3>
-                        </a>
-                        <div>{{ $store->description }}</div>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
+        @if (count($product->stores))
+            <div class="list">
+                <h4>In stores:</h4>
+                <ul>
+                    @foreach ($product->stores as $store)
+                        <li class="store">
+                            <code>{{ $store->code }}</code>
+                            <a href="{{ url($store->base_url) }}">
+                                <h3>{{ $store->name }}</h3>
+                            </a>
+                            <div>{{ $store->description }}</div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     </div>
 </body>
 

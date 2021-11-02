@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Url;
+use App\Models\Store;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -14,7 +16,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::all();
+        return view('products', ['products' => $products, 'stores' => Store::all()]);
     }
 
     /**
@@ -35,7 +38,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'sku' => 'required|string|unique:products',
+            'price' => 'required|numeric',
+            'description' => 'nullable|string',
+            'slug' => 'nullable|string',
+            'store' => 'nullable|numeric'
+        ]);
+
+        $product = Product::create($request->all());
+
+        if ($request->store && Store::find($request->store) && !$product->stores->find($request->store)) {
+            $product->stores()->attach($request->store);
+        }
+
+        return back();
     }
 
     /**
@@ -44,9 +62,10 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($path)
     {
-        //
+        $url = Url::where('path', '/' . $path)->firstOrFail();
+        return view('product', ['product' => $url->urlable]);
     }
 
     /**
@@ -55,9 +74,10 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit($path)
     {
-        //
+        $url = Url::where('path', '/' . $path)->firstOrFail();
+        return view('product-edit', ['product' => $url->urlable, 'stores' => Store::all()]);
     }
 
     /**
@@ -67,9 +87,30 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $path)
     {
-        //
+        $request->validate([
+            'name' => 'string',
+            'sku' => 'string',
+            'price' => 'numeric',
+            'description' => 'nullable|string',
+            'slug' => 'nullable|string',
+            'store' => 'nullable|numeric'
+        ]);
+
+        $url = Url::where('path', '/' . $path)->firstOrFail();
+
+        $product = $url->urlable;
+
+        $product->update($request->all());
+
+        if ($request->store && Store::find($request->store) && !$product->stores->find($request->store)) {
+            $product->stores()->attach($request->store);
+        }
+
+        $urlPath = $request->slug ??= $product->sku;
+
+        return redirect('/product/' . $urlPath);
     }
 
     /**
@@ -78,8 +119,13 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy($path)
     {
-        //
+        $url = Url::where('path', '/' . $path)->firstOrFail();
+        $url->urlable->stores()->detach();
+        $url->urlable->delete();
+        $url->delete();
+
+        return redirect('/products');
     }
 }

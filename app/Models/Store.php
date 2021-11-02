@@ -13,10 +13,10 @@ class Store extends Model
     protected $fillable = ['name', 'code', 'base_url', 'description'];
 
     /**
-     * Get the products for the store.
+     * The products that belong to the store.
      */
     public function products()
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsToMany(Product::class);
     }
 }

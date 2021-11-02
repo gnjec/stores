@@ -11,12 +11,14 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'sku', 'price', 'description', 'slug'];
+
     /**
-     * Get the store that owns the product.
+     * The stores that belong to the product.
      */
-    public function store()
+    public function stores()
     {
-        return $this->belongsTo(Store::class);
+        return $this->belongsToMany(Store::class);
     }
 
     /**

@@ -30,6 +30,12 @@
             border-radius: 2px;
         }
 
+        button {
+            border-style: solid;
+            border-radius: 2px;
+            margin-right: 4px;
+        }
+
         ul {
             width: 300px;
             padding: 0px;
@@ -59,6 +65,25 @@
             margin-left: 20px;
         }
 
+        .head {
+            margin-bottom: 40px;
+        }
+
+        .delete {
+            margin-top: 1px;
+            min-width: 80px;
+        }
+
+        .delete input {
+            background-color: wheat;
+            color: red;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+        }
+
         .menu {
             display: flex;
             justify-content: center;
@@ -66,6 +91,10 @@
 
         .menu h3 {
             padding: 10px;
+        }
+
+        .bottom ul {
+            margin: auto;
         }
 
     </style>
@@ -76,39 +105,24 @@
         <h3><a href="{{ url('/') }}">Stores</a></h3>
         <h3><a href="{{ url('/products') }}">Products</a></h3>
     </div>
-
-    <h2>Stores</h2>
     <div class="container">
-        <div>
-            <form action="/stores" method="post">
-                @csrf
-                <label for="name">Name</label>
-                <input type="text" name="name" value="">
-
-                <label for="code">Code</label>
-                <input type="text" name="code" value="">
-
-                <label for="base_url">Base url</label>
-                <input type="text" name="base_url" value="">
-
-                <label for="description">Description</label>
-                <input type="text" name="description" value="">
-                <br>
-                <input type="submit" value="Create">
-            </form>
-        </div>
-        <div class="list">
-            <ul>
-                @foreach ($stores as $store)
-                    <li class="store">
-                        <code>{{ $store->code }}</code>
-                        <a href="{{ url($store->base_url) }}">
-                            <h3>{{ $store->name }}</h3>
-                        </a>
-                        <div>{{ $store->description }}</div>
-                    </li>
-                @endforeach
-            </ul>
+        <div class="head">
+            <h2>Product</h2>
+            <p style="margin-top:-20px;">from store: <a href="{{ url('/' . $store->base_url) }}">{{ $store->name }}</a>
+                - {{ $store->code }}</p>
+            <div class="actions">
+                <form class="remove"
+                    action="{{ url('/' . $store->base_url . $product->url->path . '/remove') }}" method="post">
+                    @csrf
+                    <input type="submit" value="Remove from store">
+                </form>
+            </div>
+            <div class="product">
+                <h3>{{ $product->name }}</h3>
+                <div>{{ $product->sku }}</div>
+                <div>{{ $product->description }}</div>
+                <div>{{ $product->price }}</div>
+            </div>
         </div>
     </div>
 </body>

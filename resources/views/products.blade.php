@@ -77,35 +77,47 @@
         <h3><a href="{{ url('/products') }}">Products</a></h3>
     </div>
 
-    <h2>Stores</h2>
+    <h2>Products</h2>
     <div class="container">
         <div>
-            <form action="/stores" method="post">
+            <form action="/products" method="post">
                 @csrf
+                <label for="store">Choose a store:</label>
+                <select name="store">
+                    <option value="">- or leave empty -</option>
+                    @foreach ($stores as $store)
+                        <option value="{{ $store->id }}">{{ $store->name }} - {{ $store->code }}</option>
+                    @endforeach
+                </select>
+
                 <label for="name">Name</label>
                 <input type="text" name="name" value="">
 
-                <label for="code">Code</label>
-                <input type="text" name="code" value="">
-
-                <label for="base_url">Base url</label>
-                <input type="text" name="base_url" value="">
+                <label for="sku">Sku</label>
+                <input type="text" name="sku" value="">
 
                 <label for="description">Description</label>
                 <input type="text" name="description" value="">
+
+                <label for="price">Price</label>
+                <input type="text" name="price" value="">
+
+                <label for="slug">Slug</label>
+                <input type="text" name="slug" value="">
                 <br>
                 <input type="submit" value="Create">
             </form>
         </div>
         <div class="list">
             <ul>
-                @foreach ($stores as $store)
-                    <li class="store">
-                        <code>{{ $store->code }}</code>
-                        <a href="{{ url($store->base_url) }}">
-                            <h3>{{ $store->name }}</h3>
+                @foreach ($products as $product)
+                    <li class="product">
+                        <code>{{ $product->sku }}</code>
+                        <a href="{{ url('/product' . $product->url->path) }}">
+                            <h3>{{ $product->name }}</h3>
                         </a>
-                        <div>{{ $store->description }}</div>
+                        <div>{{ $product->description }}</div>
+                        <div>{{ $product->price }}</div>
                     </li>
                 @endforeach
             </ul>

@@ -42,9 +42,16 @@
             list-style-type: none;
         }
 
-        li {
+        .product {
             border-radius: 2px;
-            background-color: darkseagreen;
+            background-color: white;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        .store {
+            border-radius: 2px;
+            background-color: deepskyblue;
             padding: 10px;
             margin: 10px;
         }
@@ -77,62 +84,56 @@
             justify-content: center;
         }
 
+        .menu {
+            display: flex;
+            justify-content: center;
+        }
+
+        .menu h3 {
+            padding: 10px;
+        }
+
     </style>
 </head>
 
 <body class="antialiased">
-
-    <div class="head">
-        <h3><a href="{{ url('/') }}">Home</a></h3>
-        <h2>Store</h2>
-        <div class="actions">
-            <a href="{{ url($store->base_url . '/edit') }}"><button>Edit</button></a>
-            <form class="delete" action="{{ url($store->base_url . '/delete') }}" method="post">
-                @csrf
-                <input type="submit" value="Delete">
-            </form>
-        </div>
-        <h3>{{ $store->name }}</h3>
-        <div>{{ $store->code }}</div>
-        <div>{{ $store->base_url }}</div>
-        <div>{{ $store->description }}</div>
+    <div class="menu">
+        <h3><a href="{{ url('/') }}">Stores</a></h3>
+        <h3><a href="{{ url('/products') }}">Products</a></h3>
     </div>
+    <div class="container">
+        <div class="head">
+            <h2>Store</h2>
+            <div class="actions">
+                <a href="{{ url($store->base_url . '/edit') }}"><button>Edit</button></a>
+                <form class="delete" action="{{ url($store->base_url . '/delete') }}" method="post">
+                    @csrf
+                    <input type="submit" value="Delete">
+                </form>
+            </div>
+            <h3>{{ $store->name }}</h3>
+            <div>{{ $store->code }}</div>
+            <div>{{ $store->base_url }}</div>
+            <div>{{ $store->description }}</div>
+        </div>
 
-
-
-    <div class=container>
-
-        {{-- <div>
-            <form action="/stores" method="post">
-                @csrf
-                <label for="name">Name</label>
-                <input type="text" name="name" value="">
-
-                <label for="code">Code</label>
-                <input type="text" name="code" value="">
-
-                <label for="base_url">Base url</label>
-                <input type="text" name="base_url" value="">
-
-                <label for="description">Description</label>
-                <input type="text" name="description" value="">
-                <br>
-                <input type="submit" value="Submit">
-            </form>
-        </div> --}}
-
-        {{-- <div class="list">
-            <ul>
-                @foreach ($stores as $store)
-                    <li>
-                        <h3>{{ $store->name }}</h3>
-                        <div>{{ $store->code }}</div>
-                        <div>{{ $store->base_url }}</div>
-                        <div>{{ $store->description }}</div>
-                    </li>
-                @endforeach
-            </ul>
-        </div> --}}
+        @if (count($products))
+            <div class="list">
+                <h4>Has products:</h4>
+                <ul>
+                    @foreach ($products as $product)
+                        <li class="product">
+                            <a href="{{ url('/' . $store->base_url . $product->url->path) }}">
+                                <h3>{{ $product->name }}</h3>
+                            </a>
+                            <div>{{ $product->sku }}</div>
+                            <div>{{ $product->description }}</div>
+                            <div>{{ $product->price }}</div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     </div>
 </body>
 

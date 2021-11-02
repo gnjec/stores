@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Store;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class StoreController extends Controller
@@ -40,7 +41,7 @@ class StoreController extends Controller
             'name' => 'required|string',
             'code' => 'required|string|unique:stores',
             'base_url' => 'required|string|unique:stores',
-            'description' => 'string'
+            'description' => 'nullable|string'
         ]);
 
         Store::create($request->all());
@@ -56,7 +57,7 @@ class StoreController extends Controller
      */
     public function show(Store $store)
     {
-        return view('store', ['store' => $store]);
+        return view('store', ['store' => $store, 'products' => $store->products]);
     }
 
     /**
@@ -67,7 +68,7 @@ class StoreController extends Controller
      */
     public function edit(Store $store)
     {
-        return view('store-edit', ['store' => $store]);
+        return view('store-edit', ['store' => $store, 'products' => Product::all()]);
     }
 
     /**
@@ -83,10 +84,15 @@ class StoreController extends Controller
             'name' => 'string',
             'code' => 'string',
             'base_url' => 'string',
-            'description' => 'string'
+            'description' => 'nullable|string',
+            'product' => 'nullable|numeric'
         ]);
 
         $store->update($request->all());
+
+        if ($request->product && Product::find($request->product) && !$store->products->find($request->product)) {
+            $store->products()->attach($request->product);
+        }
 
         return redirect($store->base_url);
     }
@@ -99,6 +105,7 @@ class StoreController extends Controller
      */
     public function destroy(Store $store)
     {
+        $store->products()->detach();
         $store->delete();
 
         return redirect('/');
