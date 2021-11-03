@@ -11,8 +11,8 @@ class WarehouseController extends Controller
 {
     public function show(Store $store, $path)
     {
-        $url = Url::where('path', $path)->firstOrFail();
-        return view('warehouse', ['product' => $url->urlable, 'store' => $store]);
+        $product = Url::product($path);
+        return view('warehouse', ['product' => $product, 'store' => $store]);
     }
 
     public function add(Store $store)
@@ -43,10 +43,10 @@ class WarehouseController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'sku' => 'required|string|unique:products',
+            'sku' => 'required|alpha_num|unique:products',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
-            'slug' => 'nullable|string'
+            'slug' => 'nullable|alpha_num'
         ]);
 
         $product = Product::create($request->all());
@@ -58,8 +58,8 @@ class WarehouseController extends Controller
 
     public function remove(Store $store, $path)
     {
-        $url = Url::where('path', $path)->firstOrFail();
-        $url->urlable->stores()->detach($store->id);
+        $product = Url::product($path);
+        $product->stores()->detach($store->id);
 
         return redirect('/' . $store->base_url);
     }

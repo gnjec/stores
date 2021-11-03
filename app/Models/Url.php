@@ -9,6 +9,11 @@ class Url extends Model
 {
     use HasFactory;
 
+    public static function product($path)
+    {
+        return Url::where('path', $path)->firstOrFail()->urlable;
+    }
+
     /**
      * Get the parent urlable model (product or category...).
      */

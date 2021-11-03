@@ -9,13 +9,6 @@
             <div>
                 <form action="{{ url($store->base_url . '/update') }}" method="post">
                     @csrf
-                    {{-- <label for="product">Add product:</label>
-                    <select name="product">
-                        <option value="">- or leave empty -</option>
-                        @foreach ($products as $product)
-                            <option value="{{ $product->id }}">{{ $product->name }} - {{ $product->sku }}</option>
-                        @endforeach
-                    </select> --}}
 
                     <label for="name">Name</label>
                     <input type="text" name="name" value="{{ $store->name }}">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Store;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Symfony\Component\Console\Input\Input;
 
 class StoreController extends Controller
 {
@@ -39,8 +40,8 @@ class StoreController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'code' => 'required|string|unique:stores',
-            'base_url' => 'required|string|unique:stores',
+            'code' => 'required|alpha_num|unique:stores',
+            'base_url' => 'required|alpha_num|unique:stores',
             'description' => 'nullable|string'
         ]);
 
@@ -82,8 +83,8 @@ class StoreController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'code' => 'required|string',
-            'base_url' => 'required|string',
+            'code' => 'required|alpha_num',
+            'base_url' => 'required|alpha_num',
             'description' => 'nullable|string',
             'product' => 'nullable|numeric'
         ]);

@@ -40,10 +40,10 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'sku' => 'required|string|unique:products',
+            'sku' => 'required|alpha_num|unique:products',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
-            'slug' => 'nullable|string',
+            'slug' => 'nullable|alpha_num',
             'store' => 'nullable|numeric'
         ]);
 
@@ -64,8 +64,8 @@ class ProductController extends Controller
      */
     public function show($path)
     {
-        $url = Url::where('path', $path)->firstOrFail();
-        return view('product', ['product' => $url->urlable]);
+        $product = Url::product($path);
+        return view('product', ['product' => $product]);
     }
 
     /**
@@ -76,8 +76,8 @@ class ProductController extends Controller
      */
     public function edit($path)
     {
-        $url = Url::where('path', $path)->firstOrFail();
-        return view('product-edit', ['product' => $url->urlable, 'stores' => Store::all()]);
+        $product = Url::product($path);
+        return view('product-edit', ['product' => $product, 'stores' => Store::all()]);
     }
 
     /**
@@ -91,14 +91,14 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'sku' => 'required|string',
+            'sku' => 'required|alpha_num',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
-            'slug' => 'nullable|string',
+            'slug' => 'nullable|alpha_num',
             'store' => 'nullable|numeric'
         ]);
 
-        $product = Url::where('path', $path)->firstOrFail()->urlable;
+        $product = Url::product($path);
 
         $product->update($request->all());
 
@@ -117,10 +117,10 @@ class ProductController extends Controller
      */
     public function destroy($path)
     {
-        $url = Url::where('path', '/' . $path)->firstOrFail();
-        $url->urlable->stores()->detach();
-        $url->urlable->delete();
-        $url->delete();
+        $product = Url::product($path);
+        $product->stores()->detach();
+        $product->delete();
+        $product->url->delete();
 
         return redirect('/products');
     }
