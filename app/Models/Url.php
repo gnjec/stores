@@ -14,6 +14,11 @@ class Url extends Model
         return Url::where('path', $path)->firstOrFail()->urlable;
     }
 
+    public static function path($slug, $default)
+    {
+        return (!$slug || Url::where('path', $slug)->exists()) ? $default : $slug;
+    }
+
     /**
      * Get the parent urlable model (product or category...).
      */

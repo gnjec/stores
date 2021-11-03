@@ -24,13 +24,11 @@ class ProductObserver
     public function created(Product $product)
     {
         global $request;
-        if ($request->slug) {
-            $slug =  Url::where('path', $request->slug)->exists() ? $request->sku : $request->slug;
-        } else {
-            $slug = $request->sku;
-        }
+
+        $path = Url::path($request->slug, $request->sku);
+
         $url = new Url;
-        $url->path = $slug;
+        $url->path = $path;
         $product->url()->save($url);
     }
 
@@ -43,15 +41,13 @@ class ProductObserver
     public function saved(Product $product)
     {
         global $request;
-        if ($request->slug && $product->url && $request->slug !== $product->url->path) {
+
+        if ($product->url && $request->slug !== $product->url->path) {
             $product->url->delete();
-            if ($request->slug) {
-                $slug =  Url::where('path', $request->slug)->exists() ? $request->sku : $request->slug;
-            } else {
-                $slug = $request->sku;
-            }
+
+            $path = Url::path($request->slug, $request->sku);
             $url = new Url;
-            $url->path = $slug;
+            $url->path = $path;
             $product->url()->save($url);
         }
     }
