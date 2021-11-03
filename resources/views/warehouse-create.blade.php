@@ -3,17 +3,12 @@
 @section('content')
     <div class="container">
         <div class="head">
-            <h2>All Products</h2>
+            <h2>Create Product</h2>
+            <p style="margin-top:-20px;">in store: <a href="{{ url('/' . $store->base_url) }}">{{ $store->name }}</a>
+                - {{ $store->code }}</p>
             <div>
-                <form action="/products" method="post">
+                <form action="{{ url($store->base_url . '/creating') }}" method="post">
                     @csrf
-                    <label for="store">Choose a store:</label>
-                    <select name="store">
-                        <option value="">- or leave empty -</option>
-                        @foreach ($stores as $store)
-                            <option value="{{ $store->id }}">{{ $store->name }} - {{ $store->code }}</option>
-                        @endforeach
-                    </select>
 
                     <label for="name">Name</label>
                     <input type="text" name="name" value="">
@@ -42,16 +37,18 @@
                     @endif
                 </form>
             </div>
+
         </div>
-        @if (count($products))
+        @if (count($store->products))
             <div class="list">
+                <h4>Has products:</h4>
                 <ul>
-                    @foreach ($products as $product)
+                    @foreach ($store->products as $product)
                         <li class="product">
-                            <code>{{ $product->sku }}</code>
-                            <a href="{{ url('/product/' . $product->url->path) }}">
+                            <a href="{{ url('/' . $store->base_url . '/' . $product->url->path) }}">
                                 <h3>{{ $product->name }}</h3>
                             </a>
+                            <div>{{ $product->sku }}</div>
                             <div>{{ $product->description }}</div>
                             <div>{{ $product->price }}</div>
                         </li>

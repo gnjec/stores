@@ -11,7 +11,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'sku', 'price', 'description', 'slug'];
+    protected $fillable = ['name', 'sku', 'price', 'description'];
 
     /**
      * The stores that belong to the product.

@@ -4,18 +4,22 @@
     <div class="container">
         <div class="head">
             <h2>Product</h2>
+            <p style="margin-top:-20px;"><a href="{{ url('/product/' . $product->url->path) }}">{{ $product->name }}</a>
+                - {{ $product->sku }}</p>
             <div class="actions">
-                <a href="{{ url('/product' . $product->url->path . '/edit') }}"><button>Edit</button></a>
-                <form class="delete" action="{{ url('/product' . $product->url->path . '/delete') }}"
+                <a href="{{ url('/product/' . $product->url->path . '/edit') }}"><button>Edit</button></a>
+                <form class="delete" action="{{ url('/product/' . $product->url->path . '/delete') }}"
                     method="post">
                     @csrf
                     <input type="submit" value="Delete">
                 </form>
             </div>
-            <h3>{{ $product->name }}</h3>
-            <div>{{ $product->sku }}</div>
-            <div>{{ $product->description }}</div>
-            <div>{{ $product->price }}</div>
+            <br>
+            <div>{{ $product->price }} $</div>
+            <br>
+            <code>description:</code>
+            <br>
+            <code>{{ $product->description }}</code>
         </div>
 
         @if (count($product->stores))

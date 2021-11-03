@@ -33,18 +33,20 @@
             </div>
 
         </div>
-        <div class="list">
-            <ul>
-                @foreach ($stores as $store)
-                    <li class="store">
-                        <code>{{ $store->code }}</code>
-                        <a href="{{ url($store->base_url) }}">
-                            <h3>{{ $store->name }}</h3>
-                        </a>
-                        <div>{{ $store->description }}</div>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
+        @if (count($stores))
+            <div class="list">
+                <ul>
+                    @foreach ($stores as $store)
+                        <li class="store">
+                            <code>{{ $store->code }}</code>
+                            <a href="{{ url($store->base_url) }}">
+                                <h3>{{ $store->name }}</h3>
+                            </a>
+                            <div>{{ $store->description }}</div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     </div>
 @endsection

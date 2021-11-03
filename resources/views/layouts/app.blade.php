@@ -96,6 +96,7 @@
         .actions {
             display: flex;
             justify-content: center;
+            margin-bottom: 4px;
         }
 
         .menu {
@@ -118,13 +119,21 @@
             font-size: 14px;
         }
 
+        .add {
+
+        }
+
+        .create {
+
+        }
+
     </style>
 </head>
 
 <body class="antialiased">
     <div class="menu">
         <h3><a href="{{ url('/') }}">Stores</a></h3>
-        <h3><a href="{{ url('/products') }}">Products</a></h3>
+        <h3><a href="{{ url('/products') }}">All Products</a></h3>
     </div>
 
     @yield('content')

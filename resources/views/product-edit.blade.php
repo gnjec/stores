@@ -5,8 +5,10 @@
     <div class="container">
         <div class="head">
             <h2>Edit Product</h2>
+            <p style="margin-top:-20px;"><a href="{{ url('/product/' . $product->url->path) }}">{{ $product->name }}</a>
+                - {{ $product->sku }}</p>
             <div>
-                <form action="{{ url('/product' . $product->url->path . '/update') }}" method="post">
+                <form action="{{ url('/product/' . $product->url->path . '/update') }}" method="post">
                     @csrf
                     <label for="store">Add to store:</label>
                     <select name="store">
@@ -29,9 +31,18 @@
                     <input type="text" name="description" value="{{ $product->description }}">
 
                     <label for="slug">Slug</label>
-                    <input type="text" name="slug" value="{{ $product->slug }}">
+                    <input type="text" name="slug" value="{{ $product->url->path }}">
                     <br>
                     <input type="submit" value="Update">
+                    @if ($errors->any())
+                        <div class="error">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>* {{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                 </form>
             </div>
         </div>

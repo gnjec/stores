@@ -7,7 +7,7 @@
             <p style="margin-top:-20px;">from store: <a href="{{ url('/' . $store->base_url) }}">{{ $store->name }}</a>
                 - {{ $store->code }}</p>
             <div class="actions">
-                <form class="remove" action="{{ url('/' . $store->base_url . $product->url->path . '/remove') }}"
+                <form class="remove" action="{{ url('/' . $store->base_url . '/' . $product->url->path . '/remove') }}"
                     method="post">
                     @csrf
                     <input type="submit" value="Remove from store">

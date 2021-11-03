@@ -30,7 +30,14 @@ Route::get('{store:base_url}/edit', [StoreController::class, 'edit']);
 Route::post('{store:base_url}/update', [StoreController::class, 'update']);
 Route::post('{store:base_url}/delete', [StoreController::class, 'destroy']);
 
+Route::get('{store:base_url}/add', [WarehouseController::class, 'add']);
+Route::post('{store:base_url}/adding', [WarehouseController::class, 'adding']);
+Route::get('{store:base_url}/create', [WarehouseController::class, 'create']);
+Route::post('{store:base_url}/creating', [WarehouseController::class, 'creating']);
 Route::get('{store:base_url}/{path}', [WarehouseController::class, 'show']);
 Route::post('{store:base_url}/{path}/remove', [WarehouseController::class, 'remove']);
+
+
+
 
 

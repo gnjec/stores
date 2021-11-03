@@ -19,7 +19,6 @@ class CreateProductsTable extends Migration
             $table->string('sku')->unique();
             $table->text('description')->nullable();
             $table->double('price', 8, 2);
-            $table->string('slug')->nullable();
             $table->timestamps();
         });
     }

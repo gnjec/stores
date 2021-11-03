@@ -4,9 +4,17 @@ namespace App\Observers;
 
 use App\Models\Url;
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class ProductObserver
 {
+    protected $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
     /**
      * Handle the Product "created" event.
      *
@@ -15,25 +23,35 @@ class ProductObserver
      */
     public function created(Product $product)
     {
-        $product->slug ??= $product->sku;
+        global $request;
+        if ($request->slug) {
+            $slug =  Url::where('path', $request->slug)->exists() ? $request->sku : $request->slug;
+        } else {
+            $slug = $request->sku;
+        }
         $url = new Url;
-        $url->path = '/' . $product->slug;
+        $url->path = $slug;
         $product->url()->save($url);
     }
 
     /**
-     * Handle the Product "updated" event.
+     * Handle the Product "saved" event.
      *
      * @param  \App\Models\Product  $product
      * @return void
      */
-    public function updated(Product $product)
+    public function saved(Product $product)
     {
-        if ('/' . $product->slug !== $product->url->path) {
+        global $request;
+        if ($request->slug && $product->url && $request->slug !== $product->url->path) {
             $product->url->delete();
-            $product->slug ??= $product->sku;
+            if ($request->slug) {
+                $slug =  Url::where('path', $request->slug)->exists() ? $request->sku : $request->slug;
+            } else {
+                $slug = $request->sku;
+            }
             $url = new Url;
-            $url->path = '/' . $product->slug;
+            $url->path = $slug;
             $product->url()->save($url);
         }
     }

@@ -64,7 +64,7 @@ class ProductController extends Controller
      */
     public function show($path)
     {
-        $url = Url::where('path', '/' . $path)->firstOrFail();
+        $url = Url::where('path', $path)->firstOrFail();
         return view('product', ['product' => $url->urlable]);
     }
 
@@ -76,7 +76,7 @@ class ProductController extends Controller
      */
     public function edit($path)
     {
-        $url = Url::where('path', '/' . $path)->firstOrFail();
+        $url = Url::where('path', $path)->firstOrFail();
         return view('product-edit', ['product' => $url->urlable, 'stores' => Store::all()]);
     }
 
@@ -90,17 +90,15 @@ class ProductController extends Controller
     public function update(Request $request, $path)
     {
         $request->validate([
-            'name' => 'string',
-            'sku' => 'string',
-            'price' => 'numeric',
+            'name' => 'required|string',
+            'sku' => 'required|string',
+            'price' => 'required|numeric',
             'description' => 'nullable|string',
             'slug' => 'nullable|string',
             'store' => 'nullable|numeric'
         ]);
 
-        $url = Url::where('path', '/' . $path)->firstOrFail();
-
-        $product = $url->urlable;
+        $product = Url::where('path', $path)->firstOrFail()->urlable;
 
         $product->update($request->all());
 
@@ -108,9 +106,7 @@ class ProductController extends Controller
             $product->stores()->attach($request->store);
         }
 
-        $urlPath = $request->slug ??= $product->sku;
-
-        return redirect('/product/' . $urlPath);
+        return redirect('/product/' . $product->fresh()->url->path);
     }
 
     /**

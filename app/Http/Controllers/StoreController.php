@@ -81,9 +81,9 @@ class StoreController extends Controller
     public function update(Request $request, Store $store)
     {
         $request->validate([
-            'name' => 'string',
-            'code' => 'string',
-            'base_url' => 'string',
+            'name' => 'required|string',
+            'code' => 'required|string',
+            'base_url' => 'required|string',
             'description' => 'nullable|string',
             'product' => 'nullable|numeric'
         ]);
