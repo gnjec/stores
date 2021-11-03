@@ -11,19 +11,19 @@
                     @csrf
 
                     <label for="name">Name</label>
-                    <input type="text" name="name" value="">
+                    <input type="text" name="name" value="{{ old('name') }}">
 
                     <label for="sku">Sku</label>
-                    <input type="text" name="sku" value="">
+                    <input type="text" name="sku" value="{{ old('sku') }}">
 
                     <label for="description">Description</label>
-                    <input type="text" name="description" value="">
+                    <input type="text" name="description" value="{{ old('description') }}">
 
                     <label for="price">Price</label>
-                    <input type="text" name="price" value="">
+                    <input type="text" name="price" value="{{ old('price') }}">
 
                     <label for="slug">Slug</label>
-                    <input type="text" name="slug" value="">
+                    <input type="text" name="slug" value="{{ old('slug') }}">
                     <br>
                     <input type="submit" value="Create">
                     @if ($errors->any())

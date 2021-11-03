@@ -11,16 +11,16 @@
                     @csrf
 
                     <label for="name">Name</label>
-                    <input type="text" name="name" value="{{ $store->name }}">
+                    <input type="text" name="name" value="{{ old('name') ?: $store->name }}">
 
                     <label for="code">Code</label>
-                    <input type="text" name="code" value="{{ $store->code }}">
+                    <input type="text" name="code" value="{{ old('code') ?: $store->code }}">
 
                     <label for="base_url">Base url</label>
-                    <input type="text" name="base_url" value="{{ $store->base_url }}">
+                    <input type="text" name="base_url" value="{{ old('base_url') ?: $store->base_url }}">
 
                     <label for="description">Description</label>
-                    <input type="text" name="description" value="{{ $store->description }}">
+                    <input type="text" name="description" value="{{ old('description') ?: $store->description }}">
                     <br>
                     <input type="submit" value="Update">
                     @if ($errors->any())

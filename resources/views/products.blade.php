@@ -11,24 +11,25 @@
                     <select name="store">
                         <option value="">- or leave empty -</option>
                         @foreach ($stores as $store)
-                            <option value="{{ $store->id }}">{{ $store->name }} - {{ $store->code }}</option>
+                            <option value="{{ $store->id }}" {{ old('store') == $store->id ? 'selected' : '' }}>
+                                {{ $store->name }} - {{ $store->code }}</option>
                         @endforeach
                     </select>
 
                     <label for="name">Name</label>
-                    <input type="text" name="name" value="">
+                    <input type="text" name="name" value="{{ old('name') }}">
 
                     <label for="sku">Sku</label>
-                    <input type="text" name="sku" value="">
+                    <input type="text" name="sku" value="{{ old('sku') }}">
 
                     <label for="description">Description</label>
-                    <input type="text" name="description" value="">
+                    <input type="text" name="description" value="{{ old('description') }}">
 
                     <label for="price">Price</label>
-                    <input type="text" name="price" value="">
+                    <input type="text" name="price" value="{{ old('price') }}">
 
                     <label for="slug">Slug</label>
-                    <input type="text" name="slug" value="">
+                    <input type="text" name="slug" value="{{ old('slug') }}">
                     <br>
                     <input type="submit" value="Create">
                     @if ($errors->any())

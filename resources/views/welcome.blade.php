@@ -8,16 +8,16 @@
                 <form action="/stores" method="post">
                     @csrf
                     <label for="name">Name</label>
-                    <input type="text" name="name" value="">
+                    <input type="text" name="name" value="{{ old('name') }}">
 
                     <label for="code">Code</label>
-                    <input type="text" name="code" value="">
+                    <input type="text" name="code" value="{{ old('code') }}">
 
                     <label for="base_url">Base url</label>
-                    <input type="text" name="base_url" value="">
+                    <input type="text" name="base_url" value="{{ old('base_url') }}">
 
                     <label for="description">Description</label>
-                    <input type="text" name="description" value="">
+                    <input type="text" name="description" value="{{ old('description') }}">
                     <br>
                     <input type="submit" value="Create">
                     @if ($errors->any())

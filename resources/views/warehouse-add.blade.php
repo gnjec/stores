@@ -13,7 +13,8 @@
                     <select name="product">
                         <option value="">- choose -</option>
                         @foreach ($products as $product)
-                            <option value="{{ $product->id }}">{{ $product->name }} - {{ $product->sku }}</option>
+                            <option value="{{ $product->id }}" {{ old('product') == $product->id ? 'selected' : '' }}>
+                                {{ $product->name }} - {{ $product->sku }}</option>
                         @endforeach
                     </select>
                     <br>
