@@ -16,8 +16,7 @@ class StoreController extends Controller
      */
     public function index()
     {
-        $stores = Store::all();
-        return view('welcome', ['stores' => $stores]);
+        return view('welcome', ['stores' => Store::all()]);
     }
 
     /**
@@ -69,7 +68,7 @@ class StoreController extends Controller
      */
     public function edit(Store $store)
     {
-        return view('store-edit', ['store' => $store, 'products' => Product::all()]);
+        return view('store-edit', ['store' => $store]);
     }
 
     /**
@@ -86,14 +85,9 @@ class StoreController extends Controller
             'code' => 'required|alpha_num',
             'base_url' => 'required|alpha_num',
             'description' => 'nullable|string',
-            'product' => 'nullable|numeric'
         ]);
 
         $store->update($request->all());
-
-        if ($request->product && Product::find($request->product) && !$store->products->find($request->product)) {
-            $store->products()->attach($request->product);
-        }
 
         return redirect($store->base_url);
     }

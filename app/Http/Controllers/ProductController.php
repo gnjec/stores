@@ -16,8 +16,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
-        return view('products', ['products' => $products, 'stores' => Store::all()]);
+        return view('products', ['products' => Product::all(), 'stores' => Store::all()]);
     }
 
     /**
@@ -43,7 +42,7 @@ class ProductController extends Controller
             'sku' => 'required|alpha_num|unique:products',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
-            'slug' => 'nullable|alpha_num|unique:urls,path',
+            'slug' => 'nullable|alpha_num',
             'store' => 'nullable|numeric'
         ]);
 
@@ -92,7 +91,7 @@ class ProductController extends Controller
             'sku' => 'required|alpha_num',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
-            'slug' => 'nullable|alpha_num|unique:urls,path',
+            'slug' => 'nullable|alpha_num',
             'store' => 'nullable|numeric'
         ]);
 
