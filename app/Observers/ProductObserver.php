@@ -33,11 +33,9 @@ class ProductObserver
      */
     public function saved(Product $product)
     {
-        if ($product->url && $this->request->slug !== $product->url->path) {
-            $product->url()->update([
-                'path' => Url::path($this->request->slug, $this->request->sku)
-            ]);
-        }
+        $product->url()->update([
+            'path' => Url::path($this->request->slug, $this->request->sku)
+        ]);
     }
 
     /**
