@@ -8,11 +8,8 @@ use Illuminate\Http\Request;
 
 class ProductObserver
 {
-    protected $request;
-
-    public function __construct(Request $request)
+    public function __construct(protected Request $request)
     {
-        $this->request = $request;
     }
 
     /**
@@ -23,13 +20,9 @@ class ProductObserver
      */
     public function created(Product $product)
     {
-        global $request;
-
-        $path = Url::path($request->slug, $request->sku);
-
-        $url = new Url;
-        $url->path = $path;
-        $product->url()->save($url);
+        $product->url()->update([
+            'path' => Url::path($this->request->slug, $this->request->sku)
+        ]);
     }
 
     /**
@@ -40,15 +33,10 @@ class ProductObserver
      */
     public function saved(Product $product)
     {
-        global $request;
-
-        if ($product->url && $request->slug !== $product->url->path) {
-            $product->url->delete();
-
-            $path = Url::path($request->slug, $request->sku);
-            $url = new Url;
-            $url->path = $path;
-            $product->url()->save($url);
+        if ($product->url && $this->request->slug !== $product->url->path) {
+            $product->url()->update([
+                'path' => Url::path($this->request->slug, $this->request->sku)
+            ]);
         }
     }
 

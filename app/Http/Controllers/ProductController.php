@@ -43,7 +43,7 @@ class ProductController extends Controller
             'sku' => 'required|alpha_num|unique:products',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
-            'slug' => 'nullable|alpha_num',
+            'slug' => 'nullable|alpha_num|unique:urls,path',
             'store' => 'nullable|numeric'
         ]);
 
@@ -62,10 +62,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show($path)
+    public function show(Url $url)
     {
-        $product = Url::product($path);
-        return view('product', ['product' => $product]);
+        return view('product', ['product' => $url->urlable]);
     }
 
     /**
@@ -74,10 +73,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit($path)
+    public function edit(Url $url)
     {
-        $product = Url::product($path);
-        return view('product-edit', ['product' => $product, 'stores' => Store::all()]);
+        return view('product-edit', ['product' => $url->urlable, 'stores' => Store::all()]);
     }
 
     /**
@@ -87,18 +85,18 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $path)
+    public function update(Request $request, Url $url)
     {
         $request->validate([
             'name' => 'required|string',
             'sku' => 'required|alpha_num',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
-            'slug' => 'nullable|alpha_num',
+            'slug' => 'nullable|alpha_num|unique:urls,path',
             'store' => 'nullable|numeric'
         ]);
 
-        $product = Url::product($path);
+        $product = $url->urlable;
 
         $product->update($request->all());
 
@@ -115,9 +113,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy($path)
+    public function destroy(Url $url)
     {
-        $product = Url::product($path);
+        $product = $url->urlable;
         $product->stores()->detach();
         $product->delete();
         $product->url->delete();
