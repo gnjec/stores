@@ -21,7 +21,7 @@ class ProductObserver
     public function created(Product $product)
     {
         $product->url()->create([
-            'path' => Url::path($this->request->slug, $this->request->sku)
+            'path' => Url::path($this->request->slug, $product->sku)
         ]);
     }
 
@@ -31,11 +31,11 @@ class ProductObserver
      * @param  \App\Models\Product  $product
      * @return void
      */
-    public function saved(Product $product)
+    public function update(Product $product)
     {
         if ($product->url && $this->request->slug !== $product->url->path) {
             $product->url()->update([
-                'path' => Url::path($this->request->slug, $this->request->sku)
+                'path' => Url::path($this->request->slug, $product->sku)
             ]);
         }
     }
