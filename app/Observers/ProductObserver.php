@@ -20,7 +20,7 @@ class ProductObserver
      */
     public function created(Product $product)
     {
-        $product->url()->update([
+        $product->url()->create([
             'path' => Url::path($this->request->slug, $this->request->sku)
         ]);
     }

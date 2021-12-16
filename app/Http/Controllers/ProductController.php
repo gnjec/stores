@@ -16,7 +16,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('products', ['products' => Product::all(), 'stores' => Store::all()]);
+        return view('products', ['products' => Product::with('url')->get(), 'stores' => Store::all()]);
     }
 
     /**
@@ -37,7 +37,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string',
             'sku' => 'required|alpha_num|unique:products',
             'price' => 'required|numeric',
@@ -46,7 +46,7 @@ class ProductController extends Controller
             'store' => 'nullable|numeric'
         ]);
 
-        $product = Product::create($request->all());
+        $product = Product::create($validated);
 
         if ($request->store && Store::find($request->store) && !$product->stores->find($request->store)) {
             $product->stores()->attach($request->store);
@@ -86,7 +86,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, Url $url)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string',
             'sku' => 'required|alpha_num',
             'price' => 'required|numeric',
@@ -97,7 +97,7 @@ class ProductController extends Controller
 
         $product = $url->urlable;
 
-        $product->update($request->all());
+        $product->update($validated);
 
         if ($request->store && Store::find($request->store) && !$product->stores->find($request->store)) {
             $product->stores()->attach($request->store);
@@ -117,7 +117,7 @@ class ProductController extends Controller
         $product = $url->urlable;
         $product->stores()->detach();
         $product->delete();
-        $product->url->delete();
+        $url->delete();
 
         return redirect('/products');
     }

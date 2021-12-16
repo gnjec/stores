@@ -57,7 +57,7 @@ class StoreController extends Controller
      */
     public function show(Store $store)
     {
-        return view('store', ['store' => $store, 'products' => $store->products]);
+        return view('store', ['store' => $store, 'products' => $store->products->loadMissing('url')]);
     }
 
     /**

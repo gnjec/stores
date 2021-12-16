@@ -9,6 +9,8 @@ class Url extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['path'];
+
     public static function path($slug, $default)
     {
         return (!$slug || Url::where('path', $slug)->exists()) ? $default : $slug;

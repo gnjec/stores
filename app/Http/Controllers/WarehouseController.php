@@ -11,13 +11,12 @@ class WarehouseController extends Controller
 {
     public function show(Store $store, Url $url)
     {
-        return view('warehouse', ['product' => $url->urlable, 'store' => $store]);
+        return view('warehouse', ['url' => $url, 'store' => $store]);
     }
 
     public function add(Store $store)
     {
-        $products = Product::all();
-        return view('warehouse-add', ['store' => $store, 'products' => $products]);
+        return view('warehouse-add', ['store' => $store, 'products' => Product::all()]);
     }
 
     public function adding(Request $request, Store $store)
