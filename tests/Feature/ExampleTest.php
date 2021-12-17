@@ -65,4 +65,28 @@ class ExampleTest extends TestCase
         $this->assertSame($name, Product::first()->name);
         $this->assertSame($slug, Url::first()->path);
     }
+
+    public function test_request_product_create_with_store()
+    {
+        [$name, $code, $baseUrl, $description] = ['Biljke', 'blk', 'biljke', 'Prodavnica biljki i pribora.'];
+        $store = Store::create(['name' => $name, 'code' => $code, 'base_url' => $baseUrl, 'description' => $description]);
+
+        [$name, $sku, $description, $price, $slug] = ['gepard', 'ge123', 'Africki sprinter', 99.99, 'gepi'];
+        $response = $this->post(
+            '/products',
+            ['name' => $name, 'sku' => $sku, 'description' => $description, 'price' => $price, 'slug' => $slug, 'store' => $store->id]
+        );
+        $this->assertSame($name, Product::first()->name);
+        $this->assertContains($store->name, Product::first()->stores->pluck('name'));
+        $this->assertSame($slug, Url::first()->path);
+    }
+
+    public function test_request_product_create_with_invalid_store()
+    {
+        [$name, $sku, $description, $price, $slug] = ['gepard', 'ge123', 'Africki sprinter', 99.99, 'gepi'];
+        $response = $this->post(
+            '/products',
+            ['name' => $name, 'sku' => $sku, 'description' => $description, 'price' => $price, 'slug' => $slug, 'store' => 1]
+        )->assertInvalid(['store']);
+    }
 }

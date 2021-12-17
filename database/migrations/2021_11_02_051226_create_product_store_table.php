@@ -18,6 +18,8 @@ class CreateProductStoreTable extends Migration
             $table->foreignId('product_id')->constrained();
             $table->foreignId('store_id')->constrained();
             $table->timestamps();
+
+            $table->unique(['product_id', 'store_id']);
         });
     }
 

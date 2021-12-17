@@ -43,7 +43,7 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'description' => 'nullable|string',
             'slug' => 'nullable|alpha_num',
-            'store' => 'nullable|numeric'
+            'store' => 'nullable|numeric|exists:stores,id'
         ]));
 
         if ($request->store && Store::find($request->store) && !$product->stores->find($request->store)) {
@@ -92,7 +92,7 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'description' => 'nullable|string',
             'slug' => 'nullable|alpha_num',
-            'store' => 'nullable|numeric'
+            'store' => 'nullable|numeric|exists:stores,id'
         ]));
 
         if ($request->store && Store::find($request->store) && !$product->stores->find($request->store)) {
