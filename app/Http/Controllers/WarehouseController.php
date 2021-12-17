@@ -39,15 +39,13 @@ class WarehouseController extends Controller
 
     public function creating(Request $request, Store $store)
     {
-        $request->validate([
+        $product = Product::create($request->validate([
             'name' => 'required|string',
             'sku' => 'required|alpha_num|unique:products',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
             'slug' => 'nullable|alpha_num'
-        ]);
-
-        $product = Product::create($request->all());
+        ]));
 
         $product->stores()->attach($store);
 

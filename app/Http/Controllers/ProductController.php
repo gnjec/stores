@@ -37,16 +37,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $product = Product::create($request->validate([
             'name' => 'required|string',
             'sku' => 'required|alpha_num|unique:products',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
             'slug' => 'nullable|alpha_num',
             'store' => 'nullable|numeric'
-        ]);
-
-        $product = Product::create($validated);
+        ]));
 
         if ($request->store && Store::find($request->store) && !$product->stores->find($request->store)) {
             $product->stores()->attach($request->store);
@@ -86,18 +84,16 @@ class ProductController extends Controller
      */
     public function update(Request $request, Url $url)
     {
-        $validated = $request->validate([
+        $product = $url->urlable;
+
+        $product->update($request->validate([
             'name' => 'required|string',
             'sku' => 'required|alpha_num',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
             'slug' => 'nullable|alpha_num',
             'store' => 'nullable|numeric'
-        ]);
-
-        $product = $url->urlable;
-
-        $product->update($validated);
+        ]));
 
         if ($request->store && Store::find($request->store) && !$product->stores->find($request->store)) {
             $product->stores()->attach($request->store);

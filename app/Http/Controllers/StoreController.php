@@ -37,14 +37,12 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        Store::create($request->validate([
             'name' => 'required|string',
             'code' => 'required|alpha_num|unique:stores',
             'base_url' => 'required|alpha_num|unique:stores',
             'description' => 'nullable|string'
-        ]);
-
-        Store::create($request->all());
+        ]));
 
         return back();
     }
@@ -80,14 +78,12 @@ class StoreController extends Controller
      */
     public function update(Request $request, Store $store)
     {
-        $request->validate([
+        $store->update($request->validate([
             'name' => 'required|string',
             'code' => 'required|alpha_num',
             'base_url' => 'required|alpha_num',
             'description' => 'nullable|string',
-        ]);
-
-        $store->update($request->all());
+        ]));
 
         return redirect($store->base_url);
     }
