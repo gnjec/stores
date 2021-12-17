@@ -1,14 +1,12 @@
 <?php
 
 use App\Models\Product;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
-uses(LazilyRefreshDatabase::class);
 
+uses(LazilyRefreshDatabase::class);
 
 it('has home page', function () {
     $response = $this->get('/');
-
     $response->assertStatus(200);
 });
 
