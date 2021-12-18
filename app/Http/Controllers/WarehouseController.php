@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 
 class WarehouseController extends Controller
 {
-    public function show(Store $store, Url $url)
+    public function show(Store $store, Product $product)
     {
-        return view('warehouse', ['url' => $url, 'store' => $store]);
+        return view('warehouse', ['product' => $product, 'store' => $store]);
     }
 
     public function add(Store $store)
@@ -52,11 +52,9 @@ class WarehouseController extends Controller
         return back();
     }
 
-    public function remove(Store $store, Url $url)
+    public function remove(Store $store, Product $product)
     {
-        $product = $url->urlable;
         $product->stores()->detach($store->id);
-
         return redirect('/' . $store->base_url);
     }
 }

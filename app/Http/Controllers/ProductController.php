@@ -59,9 +59,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Url $url)
+    public function show(Product $product)
     {
-        return view('product', ['product' => $url->urlable]);
+        return view('product', ['product' => $product]);
     }
 
     /**
@@ -70,9 +70,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Url $url)
+    public function edit(Product $product)
     {
-        return view('product-edit', ['product' => $url->urlable, 'stores' => Store::all()]);
+        return view('product-edit', ['product' => $product, 'stores' => Store::all()]);
     }
 
     /**
@@ -82,10 +82,8 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Url $url)
+    public function update(Request $request, Product $product)
     {
-        $product = $url->urlable;
-
         $product->update($request->validate([
             'name' => 'required|string',
             'sku' => 'required|alpha_num',
@@ -108,12 +106,11 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Url $url)
+    public function destroy(Product $product)
     {
-        $product = $url->urlable;
         $product->stores()->detach();
         $product->delete();
-        $url->delete();
+        $product->url->delete();
 
         return redirect('/products');
     }

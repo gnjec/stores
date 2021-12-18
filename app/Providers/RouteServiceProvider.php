@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Url;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -49,6 +50,9 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
 
             Route::model('url', Url::class);
+            Route::model('product', Product::class , function($path) {
+                return Url::where('path', $path)->first()->urlable;
+            });
         });
     }
 
